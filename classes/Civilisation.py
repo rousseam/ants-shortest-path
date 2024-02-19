@@ -3,7 +3,7 @@ from classes.City import City
 
 @dataclass
 class Civilisation:
-    name: str
+    cities: City
     nest: City
     food: City
 

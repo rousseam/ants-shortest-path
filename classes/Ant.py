@@ -9,3 +9,6 @@ class Ant:
 
     def move(self):
         pass
+
+    def drop_pheromone(self):
+        pass

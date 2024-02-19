@@ -4,3 +4,6 @@ from dataclasses import dataclass
 class City:
     name: str
     position: str
+
+    def getRoads(self):
+        pass
