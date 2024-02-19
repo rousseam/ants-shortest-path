@@ -15,10 +15,7 @@ class Ant:
     def get_route(self):
         return self.__route
     def reset_route(self):
-        self.__route=[]
-
+        self.__route=[]    
     
-    
-    
-    def move(self, Civilisation):
-        passC:
+    def move(self, City):
+        self.__route.append(City)
