@@ -34,19 +34,19 @@ class Civilisation:
         return [Ant(self.__start_city, [], RATE) for i in range(self.__ants_number)]
 
 
-def tsp(Civilisation): 
+def tsp(self): 
     time, cycle_number = 0 , 0 
-    for r in Civilisation.__road : 
+    for r in self.__road : 
         r.valeur_phero= depot_init
 
-    for i in Civilisation.__ants_list:
-        i.set_position(rd.choice(Civilisation.__list_cities))
-    while len(Civilisation.__ants_list[-1].get_route()) < len(Civilisation.__cities):
-        for i in Civilisation.__ants_list : 
-            a= choisir(Civilisation,i)
+    for i in self.__ants_list:
+        i.set_position(rd.choice(self.__list_cities))
+    while len(self.__ants_list[-1].get_route()) < len(self.__cities):
+        for i in self.__ants_list : 
+            a= choisir(self,i)
             i.set_position(a)
-    
-def choisir(Civilisation, Ant):
+
+def choisir(self, Ant):
     p=Ant.get_position()
     R=Ant.get_route()
     A= Ant.accessible_city
@@ -55,7 +55,9 @@ def choisir(Civilisation, Ant):
             del A[i]
     
     
-
+def accessible_city(self, City):
+    for R in self.__roads() : 
+        
 
 
 

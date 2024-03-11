@@ -20,3 +20,6 @@ class Road:
 
     def get_pheromone_quantity(self):
         return self.__pheromone_quantity
+
+    def get_cities(self):
+        return [self.__city1, self.__city2]
