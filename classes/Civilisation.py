@@ -56,8 +56,17 @@ def choisir(self, Ant):
     
     
 def accessible_city(self, City):
+    L = []
     for R in self.__roads() : 
-        
+        A= R.get.cities()
+        if City == A[0] :
+            L.append(A[1])
+        if City == A[1]:
+            L.append(A[0])
+    return L
+
+            
+
 
 
 
