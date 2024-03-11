@@ -3,8 +3,8 @@ from classes.Position import Position
 
 @dataclass
 class City:
-    name: str
-    position: Position
+    __name: str
+    __position: Position
 
     def getRoads(self):
         pass

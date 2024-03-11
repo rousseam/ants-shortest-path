@@ -11,6 +11,7 @@ class Ant:
     def get_position(self):
         return self.__current_city 
     def set_position(self,City):
+        self.__route.append(City)
         self.__current_city = City
    
     def get_route(self):

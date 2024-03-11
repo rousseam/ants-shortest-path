@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from classes.City import City
 from classes.Road import Road
 from classes.Ant import Ant
-
+import random as rd
 RATE = 0.2
 
 @dataclass
@@ -32,3 +32,26 @@ class Civilisation:
 
     def generate_ants(self):
         return [Ant(self.__start_city, [], RATE) for i in range(self.__ants_number)]
+
+
+def tsp(Civilisation): 
+    time, cycle_number = 0 , 0 
+    for r in Civilisation.__road : 
+        r.valeur_phero= depot_init
+
+    for i in Civilisation.__ants_list:
+        i.set_position(rd.choice(Civilisation.__list_cities))
+    while len(Civilisation.__ants_list[-1].get_route()) < len(Civilisation.__cities):
+        for i in Civilisation.__ants_list : 
+            
+    
+
+
+
+
+
+
+
+
+
+
