@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from City import City
 
 @dataclass
 class Road:
