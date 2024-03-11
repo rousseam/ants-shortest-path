@@ -43,8 +43,21 @@ def tsp(Civilisation):
         i.set_position(rd.choice(Civilisation.__list_cities))
     while len(Civilisation.__ants_list[-1].get_route()) < len(Civilisation.__cities):
         for i in Civilisation.__ants_list : 
-            
+            a= choisir(Civilisation,i)
+            i.set_position(a)
     
+def choisir(Civilisation, Ant):
+    p=Ant.get_position()
+    R=Ant.get_route()
+    A= Ant.accessible_city
+    for i in range(len(A)):
+        if A[i] in R:
+            del A[i]
+    
+    
+
+
+
 
 
 
