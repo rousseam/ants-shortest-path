@@ -6,6 +6,7 @@ class Ant:
     __current_city : City
     __route : list[City]
     __rate_phero : int
+    __length_road : float
     isCarryingFood:bool
 
     def get_position(self):
@@ -21,3 +22,11 @@ class Ant:
     
     def move(self, City):
         self.__route.append(City)
+    def set_length_road(self,L):
+        self.__length_road=L
+    def get_length_road(self):
+        return self.__length_road
+
+    
+    
+
