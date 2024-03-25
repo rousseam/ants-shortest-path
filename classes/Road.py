@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from City import City
+from classes.City import City
 
 @dataclass
 class Road:
@@ -7,12 +7,14 @@ class Road:
         self.__city1 = city1
         self.__city2 = city2
         self.__pheromone_quantity = 0
-        self.__length = self.set_length(city1, city2)
+        self.__length = 0
 
     def set_length(self): 
-        self.__length = ((self.__city1.position.x_coordinate()-self.__city2.position.x_coordinate())**2 - (self.__city1.position.y_coordinate()-self.__city2.position.y_coordinate())**2)**(1/2)
+        self.__length = (abs((self.__city1.get_position().x_coordinate-self.__city2.get_position().x_coordinate)**2 - (self.__city1.get_position().y_coordinate-self.__city2.get_position().y_coordinate)**2))**(1/2)
 
-    def get_length(self): 
+    def get_length(self):
+        if self.__length == 0:
+            self.set_length()
         return self.__length
 
     def set_pheromone_quantity(self,h=0):
