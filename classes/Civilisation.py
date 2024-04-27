@@ -4,6 +4,8 @@ from classes.Road import Road
 from classes.Ant import Ant
 import random as rd
 RATE = 0.2
+MAX_CYCLE = 1000
+PHERO_INIT = 0.1
 
 @dataclass
 class Civilisation:
@@ -38,24 +40,29 @@ class Civilisation:
 
 
     def tsp(self): 
-        time, cycle_number = 0 , 0 
-        etat= False
-        for r in self.__road : 
-            r.valeur_phero= depot_init #initial deposit of pheromone on all of the track modifier le bail
-        while cycle_number< cycle_number_max and etat :#definir cycle number
-            for i in self.__ants_list:
-                i.set_position(rd.choice(self.__list_cities))
+        time, cycle_number = 0, 0 
+        is_stagnation = False
+
+        for road in self.__roads: 
+            road.set_pheromone_quantity(PHERO_INIT) #initial deposit of pheromone on all of the track modifier le bail
+
+        while cycle_number < MAX_CYCLE and is_stagnation: #definir cycle number
+            for ant in self.__ants_list:
+                ant.set_position(rd.choice(self.__cities))
+
             while len(self.__ants_list[-1].get_route()) < len(self.__cities):
-                for i in self.__ants_list : 
-                    L= choisir(self,i)
-                    i.set_position(L[0])
-                    i.set_length_road(i.get_length_road()+L[1])
-            etat =  etat_stagnation(self.__ants_list)
-            for i in self.__ant_list : 
-                actualisation_pheromone(self, i)
-                i.reset_route()
+                for ant in self.__ants_list : 
+                    L= self.choisir(self, ant)
+                    ant.set_position(L[0])
+                    ant.set_travel_length(ant.get_travel_length() + L[1])
+            is_stagnation =  self.etat_stagnation(self.__ants_list)
+
+            for ant in self.__ants_list :
+                self.actualisation_pheromone(self, ant)
+                ant.reset_route()
+
             time += len(self.__cities)
-            cycle_number+=1
+            cycle_number += 1
 
     def etat_stagnation(self,list_ant):
         route = list_ant[0].get_route()
@@ -63,6 +70,7 @@ class Civilisation:
             if i.get_route() != route : 
                 return True
         return False
+
     def actualisation_pheromone(self,Ant):
         R=Ant.get_route()    
         phero_drop= self.__Q /Ant.get_length_road()
@@ -74,49 +82,50 @@ class Civilisation:
 
 
     def choisir(self, Ant: Ant):
-        p=Ant.get_position()
-        R=Ant.get_route()
-        A= Ant.accessible_city
-        for i in range(len(A)):
-            if A[i] in R:
-                R.remove(A[i])
-        l_length=[0 for j in range(len(R))]
-        l_phero=[0 for j in range(len(R))]
-        for i in self.__road:
-            for j in range(len(R)):
-                if [p,R[j]]== i.get_cities():
-                    l_length[j]= i.get_length()
-                    l_phero[j]= i.get_pheromone_quantity()
+        position = Ant.get_position()
+        ant_path = Ant.get_route()
+        accessible_roads: list[Road] = Ant.accessible_city # à modifier
+        for road_accessible in accessible_roads:
+            if road_accessible in ant_path:
+                ant_path.remove(road_accessible)
+        l_length = [0 for j in range(len(road_accessible))]
+        l_phero = [0 for j in range(len(road_accessible))]
+
+        for road in self.__roads:
+            for j in range(len(road_accessible)):
+                if [position, road_accessible[j]] == road.get_cities():
+                    l_length[j] = road.get_length()
+                    l_phero[j] = road.get_pheromone_quantity()
+
         probability=[0]
         probality_total=0
+
         for i in range(len(l_length)):
             probality_total+=l_phero(i)**self.__alpha * (1/l_length[i])**self.__beta
-            probability.append(probability[-1]+l_phero(i)**self.__alpha * (1/l_length[i])**self.__beta)
-        probability=list(map(lambda x : x*probality_total,probability))
-        k=proba(probability)  
-        return  [R[k],l_length[k]]
+            probability.append(probability[-1] + l_phero(i)**self.__alpha * (1/l_length[i])**self.__beta)
+
+        probabilities=list(map(lambda x : x*probality_total,probability))
+        k = self.proba(probabilities)  
+        return  [accessible_roads[k], l_length[k]]
             
 
-    def proba(L):
-        c=rd.random()
-        i=0
-        while c>L[i]:
-            i+=1
+    def proba(probabilities):
+        p = rd.random()
+        i = 0
+        while p > probabilities[i]:
+            i += 1
 
-        return i-1
+        return i - 1
 
-    def accessible_city(self, City):
-        L = []
-        for R in self.__roads() : 
-            A= R.get.cities()
-            if City == A[0] :
-                L.append(A[1])
-            if City == A[1]:
-                L.append(A[0])
-        return L
-
-    def drop_phero(self, Ant):
-        a=Ant.length_road()
+    def accessible_city(self, city):
+        accessible_cities = []
+        for road in self.__roads : 
+            cities = road.get_cities()
+            if city == cities[0] :
+                accessible_cities.append(cities[1])
+            if city == cities[1]:
+                accessible_cities.append(cities[0])
+        return accessible_cities
             
 
 
